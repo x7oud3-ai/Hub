@@ -10,23 +10,25 @@
         
         body {
             font-family: 'Tajawal', sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             color: white;
+            padding: 20px 10px;
         }
 
         .glass-morphism {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 1.5rem;
         }
 
         .record-btn {
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .recording {
@@ -35,61 +37,96 @@
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
         .visualizer-bar {
             width: 4px;
-            background: #3b82f6;
+            background: #60a5fa;
             margin: 0 2px;
             border-radius: 2px;
             transition: height 0.1s ease;
         }
+
+        .ad-container {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            overflow: hidden;
+            width: 100%;
+        }
     </style>
 </head>
-<body class="p-4">
+<body>
 
-    <div class="max-w-md w-full glass-morphism p-8 shadow-2xl">
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-blue-400 mb-2">مسجل الصوت</h1>
-            <p class="text-gray-400 text-sm">Powered by TECH</p>
-        </div>
+    <!-- Top Ad 728x90 -->
+    <div class="ad-container hidden md:flex">
+        <script>
+            atOptions = {
+                'key' : '42ac2f525ff092dad94059b5e021c91e',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+            };
+        </script>
+        <script src="https://www.highperformanceformat.com/42ac2f525ff092dad94059b5e021c91e/invoke.js"></script>
+    </div>
 
-        <!-- Timer -->
+    <!-- Main Content -->
+    <div class="max-w-md w-full glass-morphism p-6 shadow-2xl mt-4">
         <div class="text-center mb-6">
-            <div id="timer" class="text-5xl font-mono font-bold text-white mb-2">00:00</div>
-            <div id="status" class="text-blue-400 text-sm animate-pulse hidden">جاري التسجيل...</div>
+            <h1 class="text-2xl font-bold text-blue-400">مسجل الصوت الذكي</h1>
+            <p class="text-gray-500 text-xs mt-1">POWERED BY TECH</p>
         </div>
 
-        <!-- Visualizer -->
-        <div id="visualizer" class="flex items-end justify-center h-16 mb-8 overflow-hidden">
-            <!-- Bars will be added by JS -->
+        <!-- Timer Area -->
+        <div class="text-center mb-4">
+            <div id="timer" class="text-6xl font-mono font-bold text-white mb-2">00:00</div>
+            <div id="status" class="text-blue-400 text-sm hidden">جاري تسجيل صوتك الآن...</div>
         </div>
 
-        <!-- Controls -->
-        <div class="flex flex-col items-center gap-6">
-            <button id="recordBtn" class="record-btn w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center shadow-lg hover:bg-blue-500 focus:outline-none">
+        <!-- Visualizer Area -->
+        <div id="visualizer" class="flex items-end justify-center h-12 mb-6 opacity-60">
+            <!-- Visualizer Bars -->
+        </div>
+
+        <!-- Control Button -->
+        <div class="flex flex-col items-center gap-4">
+            <button id="recordBtn" class="record-btn w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center shadow-lg hover:bg-blue-500 focus:outline-none ring-4 ring-blue-900/30">
                 <svg id="micIcon" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
                 </svg>
                 <svg id="stopIcon" xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <rect x="6" y="6" width="12" height="12" stroke-width="2" />
+                    <rect x="6" y="6" width="12" height="12" stroke-width="2" rx="1" />
                 </svg>
             </button>
-
-            <div id="messageBox" class="text-center text-sm text-red-400 hidden"></div>
+            <p id="messageBox" class="text-sm text-red-400 hidden text-center"></p>
         </div>
 
-        <!-- Playlist -->
-        <div class="mt-10">
-            <h2 class="text-lg font-bold mb-4 border-b border-gray-700 pb-2">التسجيلات المحفوظة</h2>
-            <div id="recordingsList" class="space-y-4 max-h-60 overflow-y-auto pr-2">
-                <!-- Recorded items will appear here -->
-                <p id="emptyMsg" class="text-gray-500 text-center py-4">لا توجد تسجيلات بعد</p>
+        <!-- Recorded List -->
+        <div class="mt-8">
+            <h2 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-3 border-b border-gray-800 pb-2">قائمة التسجيلات</h2>
+            <div id="recordingsList" class="space-y-3 max-h-48 overflow-y-auto custom-scrollbar">
+                <p id="emptyMsg" class="text-gray-600 text-center py-4 text-sm">لا يوجد لديك أي تسجيلات حالية</p>
             </div>
         </div>
+    </div>
+
+    <!-- Bottom Ad 320x50 -->
+    <div class="ad-container mt-6">
+        <script>
+            atOptions = {
+                'key' : '7795822a45b283ef7e3cf23823a6f6e2',
+                'format' : 'iframe',
+                'height' : 50,
+                'width' : 320,
+                'params' : {}
+            };
+        </script>
+        <script src="https://www.highperformanceformat.com/7795822a45b283ef7e3cf23823a6f6e2/invoke.js"></script>
     </div>
 
     <script>
@@ -112,8 +149,8 @@
         const visualizer = document.getElementById('visualizer');
         const messageBox = document.getElementById('messageBox');
 
-        // Create visualizer bars
-        for (let i = 0; i < 20; i++) {
+        // Create 15 bars for visualizer
+        for (let i = 0; i < 15; i++) {
             const bar = document.createElement('div');
             bar.className = 'visualizer-bar';
             bar.style.height = '4px';
@@ -126,114 +163,94 @@
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mediaRecorder = new MediaRecorder(stream);
                 
-                // Visualizer Setup
                 audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 const source = audioContext.createMediaStreamSource(stream);
                 analyser = audioContext.createAnalyser();
-                analyser.fftSize = 64;
+                analyser.fftSize = 32;
                 source.connect(analyser);
                 dataArray = new Uint8Array(analyser.frequencyBinCount);
 
-                mediaRecorder.ondataavailable = (event) => {
-                    audioChunks.push(event.data);
-                };
-
+                mediaRecorder.ondataavailable = (event) => audioChunks.push(event.data);
                 mediaRecorder.onstop = () => {
                     const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                    const audioUrl = URL.createObjectURL(audioBlob);
-                    addRecordingToList(audioUrl);
+                    const url = URL.createObjectURL(audioBlob);
+                    saveRecording(url);
                     audioChunks = [];
                     stream.getTracks().forEach(track => track.stop());
                 };
 
                 mediaRecorder.start();
-                updateUI(true);
-                startTimer();
-                animateVisualizer();
+                toggleUI(true);
+                animate();
                 messageBox.classList.add('hidden');
             } catch (err) {
-                console.error("خطأ في الوصول للميكروفون:", err);
-                messageBox.innerText = "يرجى السماح بالوصول إلى الميكروفون للمتابعة.";
+                messageBox.innerText = "فشل الوصول للميكروفون. يرجى التأكد من السماح بالأذونات.";
                 messageBox.classList.remove('hidden');
             }
         }
 
         function stopRecording() {
             mediaRecorder.stop();
-            updateUI(false);
-            stopTimer();
+            toggleUI(false);
             cancelAnimationFrame(animationId);
-            bars.forEach(bar => bar.style.height = '4px');
+            bars.forEach(b => b.style.height = '4px');
         }
 
-        function updateUI(isRecording) {
-            if (isRecording) {
+        function toggleUI(isRecording) {
+            if(isRecording) {
                 recordBtn.classList.add('recording');
                 micIcon.classList.add('hidden');
                 stopIcon.classList.remove('hidden');
                 statusDisplay.classList.remove('hidden');
+                startTimer();
             } else {
                 recordBtn.classList.remove('recording');
                 micIcon.classList.remove('hidden');
                 stopIcon.classList.add('hidden');
                 statusDisplay.classList.add('hidden');
+                stopTimer();
             }
         }
 
         function startTimer() {
             seconds = 0;
+            timerDisplay.innerText = "00:00";
             timerInterval = setInterval(() => {
                 seconds++;
-                const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-                const secs = (seconds % 60).toString().padStart(2, '0');
-                timerDisplay.innerText = `${mins}:${secs}`;
+                const m = Math.floor(seconds/60).toString().padStart(2, '0');
+                const s = (seconds%60).toString().padStart(2, '0');
+                timerDisplay.innerText = `${m}:${s}`;
             }, 1000);
         }
 
-        function stopTimer() {
-            clearInterval(timerInterval);
-        }
+        function stopTimer() { clearInterval(timerInterval); }
 
-        function animateVisualizer() {
-            animationId = requestAnimationFrame(animateVisualizer);
+        function animate() {
+            animationId = requestAnimationFrame(animate);
             analyser.getByteFrequencyData(dataArray);
-            
             bars.forEach((bar, i) => {
                 const val = dataArray[i] || 0;
-                const height = Math.max(4, (val / 255) * 64);
-                bar.style.height = `${height}px`;
+                bar.style.height = `${Math.max(4, (val/255)*48)}px`;
             });
         }
 
-        function addRecordingToList(url) {
+        function saveRecording(url) {
             emptyMsg.classList.add('hidden');
-            
-            const recordingItem = document.createElement('div');
-            recordingItem.className = 'bg-white/10 p-3 rounded-lg flex flex-col gap-2';
-            
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' });
-
-            recordingItem.innerHTML = `
-                <div class="flex justify-between items-center text-xs text-gray-400">
-                    <span>تسجيل جديد</span>
-                    <span>${timeStr}</span>
+            const item = document.createElement('div');
+            item.className = 'bg-white/5 p-3 rounded-xl border border-white/5';
+            item.innerHTML = `
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-[10px] text-gray-500">تم التسجيل: ${new Date().toLocaleTimeString('ar-EG')}</span>
+                    <a href="${url}" download="TECH_Record.wav" class="text-xs text-blue-500 hover:text-blue-300">تحميل</a>
                 </div>
-                <audio controls src="${url}" class="w-full h-8"></audio>
-                <div class="flex justify-end">
-                    <a href="${url}" download="recording_${Date.now()}.wav" class="text-xs text-blue-400 hover:underline">تحميل الملف</a>
-                </div>
+                <audio controls src="${url}" class="w-full h-8 opacity-80"></audio>
             `;
-            
-            recordingsList.prepend(recordingItem);
+            recordingsList.prepend(item);
         }
 
         recordBtn.addEventListener('click', () => {
-            if (mediaRecorder && mediaRecorder.state === 'recording') {
-                stopRecording();
-            } else {
-                startRecording();
-            }
+            if(mediaRecorder?.state === 'recording') stopRecording();
+            else startRecording();
         });
     </script>
 </body>
